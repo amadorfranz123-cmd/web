@@ -1,0 +1,86 @@
+-- Crear la base de datos sistema_medico1
+CREATE DATABASE IF NOT EXISTS sistema_medico1 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+-- Seleccionar la base de datos
+USE sistema_medico1;
+
+-- Tabla persona: Almacena información básica de todas las personas
+CREATE TABLE persona (
+    id_persona INT(11) NOT NULL AUTO_INCREMENT,
+    nombres VARCHAR(100) NOT NULL,
+    apellidos VARCHAR(100) NOT NULL,
+    fecha_nacimiento DATE DEFAULT NULL,
+    sexo ENUM('1', '0', '2') DEFAULT NULL COMMENT '1: Masculino, 0: Femenino, 2: Otro',
+    telefono VARCHAR(20) DEFAULT NULL,
+    email VARCHAR(100) DEFAULT NULL UNIQUE,
+    notas TEXT DEFAULT NULL,
+    PRIMARY KEY (id_persona)
+) ENGINE=InnoDB;
+
+-- Tabla personal_de_salud: Almacena información de médicos, enfermeras y administradores
+CREATE TABLE personal_de_salud (
+    id_medico INT(11) NOT NULL,
+    ci INT(11) DEFAULT NULL UNIQUE,
+    direccion VARCHAR(150) DEFAULT NULL,
+    rol ENUM('medico', 'enfermera', 'admin') NOT NULL,
+    especialidad VARCHAR(100) DEFAULT NULL,
+    PRIMARY KEY (id_medico),
+    FOREIGN KEY (id_medico) REFERENCES persona(id_persona) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Tabla paciente: Relaciona a las personas con el rol de paciente
+CREATE TABLE paciente (
+    id_persona INT(11) NOT NULL,
+    PRIMARY KEY (id_persona),
+    FOREIGN KEY (id_persona) REFERENCES persona(id_persona) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Tabla usuario: Gestiona las credenciales de acceso
+CREATE TABLE usuario (
+    id_usuario INT(11) NOT NULL AUTO_INCREMENT,
+    id_persona INT(11) NOT NULL,
+    contrasena VARCHAR(255) NOT NULL,
+    nombre_usuario VARCHAR(50) NOT NULL UNIQUE,
+    correo VARCHAR(100) NOT NULL UNIQUE,
+    activo TINYINT(1) DEFAULT 1,
+    PRIMARY KEY (id_usuario),
+    FOREIGN KEY (id_persona) REFERENCES persona(id_persona) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Tabla turno: Gestiona los turnos de los médicos
+CREATE TABLE turno (
+    id_turno INT(11) NOT NULL AUTO_INCREMENT,
+    id_medico INT(11) NOT NULL,
+    nombre_paciente VARCHAR(100) DEFAULT NULL,
+    hora_inicio TIME DEFAULT NULL,
+    hora_fin TIME DEFAULT NULL,
+    PRIMARY KEY (id_turno),
+    FOREIGN KEY (id_medico) REFERENCES personal_de_salud(id_medico) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Tabla atencion: Almacena detalles de las atenciones médicas
+CREATE TABLE atencion (
+    id_atencion INT(11) NOT NULL AUTO_INCREMENT,
+    id_medico INT(11) NOT NULL,
+    fecha_atencion TIMESTAMP NULL DEFAULT NULL,
+    recetas TEXT DEFAULT NULL,
+    diagnostico TEXT DEFAULT NULL,
+    PRIMARY KEY (id_atencion),
+    FOREIGN KEY (id_medico) REFERENCES personal_de_salud(id_medico) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Tabla cita: Gestiona las citas médicas
+CREATE TABLE cita (
+    id_cita INT(11) NOT NULL AUTO_INCREMENT,
+    id_doctor INT(11) NOT NULL,
+    id_paciente INT(11) NOT NULL,
+    id_atencion INT(11) DEFAULT NULL,
+    fecha_hora_cita DATETIME NOT NULL,
+    motivo_cita VARCHAR(255) DEFAULT NULL,
+    notas_administrativas TEXT DEFAULT NULL,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_cita),
+    FOREIGN KEY (id_doctor) REFERENCES personal_de_salud(id_medico) ON DELETE CASCADE,
+    FOREIGN KEY (id_paciente) REFERENCES paciente(id_persona) ON DELETE CASCADE,
+    FOREIGN KEY (id_atencion) REFERENCES atencion(id_atencion) ON DELETE SET NULL
+) ENGINE=InnoDB;

@@ -1,0 +1,44 @@
+C:\xampp\htdocs\tercero\Nueva carpeta\
+├── config\
+│   └── conexion_bd.php
+├── includes\
+│   ├── cabecera.php
+│   ├── pie_pagina.php
+│   └── autenticacion.php
+├── css\
+│   └── estilos.css
+├── js\
+│   └── scripts.js
+├── administrador\
+│   ├── panel.php
+│   ├── gestionar_citas.php
+│   ├── eliminar_cita.php
+│   └── ver_historial_citas.php
+├── medico\
+│   ├── panel.php
+│   ├── ver_citas.php
+│   ├── expedientes_medicos.php
+│   ├── registrar_diagnostico.php
+│   └── imprimir_informe.php
+├── enfermera\
+│   ├── panel.php
+│   ├── registrar_turno.php
+│   ├── actualizar_historial_medico.php
+│   ├── reprogramar_cita.php
+│   ├── cancelar_cita.php
+│   ├── enviar_recordatorio.php
+│   ├── registrar_paciente.php
+│   ├── generar_historial_medico.php
+│   └── ver_citas.php
+├── paciente\
+│   ├── panel.php
+│   ├── actualizar_datos_personales.php
+│   ├── ver_historial_medico.php
+│   ├── solicitar_cita.php
+│   └── cancelar_cita.php
+├── index.php
+├── iniciar_sesion.php
+├── registrarse.php
+├── cerrar_sesion.php
+└── sql\
+    └── base_datos.sql
